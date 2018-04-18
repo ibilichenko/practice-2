@@ -1,12 +1,3 @@
-function getTermStruct(coef, power) {
-    const sign = getSign(coef),
-        coefficient = getCoef(Math.abs(coef), power),
-        xPower = getXPower(power),
-        mulSign = coefficient && xPower ? "*" : "";
-
-    return { sign, coefficient, xPower, mulSign };
-}
-
 function getSign(coef) {
     return coef < 0 ? "-" : "+";
 }
@@ -21,6 +12,15 @@ function getXPower(power) {
         case 1: return "x";
         default: return `x^${power}`;
     }
+}
+
+function getTermStruct(coef, power) {
+    const sign = getSign(coef),
+        coefficient = getCoef(Math.abs(coef), power),
+        xPower = getXPower(power),
+        mulSign = coefficient && xPower ? "*" : "";
+
+    return { sign, coefficient, xPower, mulSign };
 }
 
 export default function getPolynomial(...coefficients) {

@@ -42,7 +42,7 @@ export default function runRover(commandsList) {
     }
 
     function filterBadCommands(command) {
-        return command.command === "turn right" || command.command === "turn left" || command.command.indexOf("go") === 0
+        return command.command === "turn right" || command.command === "turn left" || command.command.indexOf("go") === 0;
     }
 
     const position = commandsList
