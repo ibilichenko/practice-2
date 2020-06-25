@@ -1,9 +1,9 @@
 
 export default function runRover(commandsList) {
-    // Change me!
+  // Change me!
 
-    return {
-        x: 0,
-        y: 0
-    };
+  return {
+    x: 0,
+    y: 0
+  };
 }

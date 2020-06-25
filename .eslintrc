@@ -1,7 +1,7 @@
 {
-  "extends": "eslint",
+  "extends": "standard",
   "env": {
-    "es6": true,
+    "es2020": true,
     "browser": true,
     "mocha": true,
     "node": true
@@ -10,11 +10,12 @@
     "sourceType": "module"
   },
   "rules": {
+    "space-before-function-paren": "off",
+    "semi": "off",
     "no-console": "off",
     "no-debugger": "off",
     "require-jsdoc": "off",
     "lines-around-comment": "off",
-    "newline-after-var": "off",
     "no-undefined": "off",
     "no-confusing-arrow": "off",
     "brace-style": ["error", "1tbs", { "allowSingleLine": true }],

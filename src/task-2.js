@@ -1,6 +1,6 @@
 
 export default function createCounter(n) {
-    // Change me!
+  // Change me!
 
-    return function() {};
+  return function() {};
 }

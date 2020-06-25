@@ -1,16 +1,16 @@
 function getExpeditionsTargets(commandSeries) {
-    // Change me!
+  // Change me!
 
-    return [];
+  return [];
 }
 
 export default function boundingRover(commandSeries) {
-    // Change me!
+  // Change me!
 
-    return {
-        top: 0,
-        right: 0,
-        bottom: 0,
-        left: 0
-    };
+  return {
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0
+  };
 }

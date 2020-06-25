@@ -1,6 +1,6 @@
 
 export default function sum(...values) {
-    // Change me!
+  // Change me!
 
-    return 0;
+  return 0;
 }

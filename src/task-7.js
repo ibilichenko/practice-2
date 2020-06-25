@@ -1,6 +1,6 @@
 
 export default function getPolynomial(...coefficients) {
-    // Change me!
+  // Change me!
 
-    return "0";
+  return '0';
 }
