@@ -1,6 +1,5 @@
 
 export default function runRover(commandsList) {
-
     const ship = {
         directions: ["top", "left", "bottom", "right"],
         indexOfCurrDirection: 0,

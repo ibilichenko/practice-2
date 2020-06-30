@@ -1,6 +1,6 @@
 
 export default function findPath(obj) {
-    // Change me!
+  // Change me!
 
-    return null;
+  return null;
 }
