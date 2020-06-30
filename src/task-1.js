@@ -1,5 +1,6 @@
 
 export default function sum(...values) {
+  // Change me!
 
-    return values.reduce((accumulator, currentValue) => accumulator + currentValue);
+  return 0;
 }
