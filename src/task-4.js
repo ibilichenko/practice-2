@@ -1,56 +1,42 @@
-
 export default function runRover(commandsList) {
-  const ship = {
-    directions: ['top', 'left', 'bottom', 'right'],
-    indexOfCurrDirection: 0,
-    x: 0,
-    y: 0,
-    go(distance) {
-      switch (this.directions[this.indexOfCurrDirection]) {
-        case 'top': this.y += distance;
-          break;
-        case 'left': this.x -= distance;
-          break;
-        case 'bottom': this.y -= distance;
-          break;
-        case 'right': this.x += distance;
-          break;
-        default: break;
-      }
-    },
-    turn(direction) {
-      if (direction === 'left') {
-        this.indexOfCurrDirection++;
-        if (this.indexOfCurrDirection === 4) { this.indexOfCurrDirection = 0; }
-      } else {
-        this.indexOfCurrDirection--;
-        if (this.indexOfCurrDirection === -1) { this.indexOfCurrDirection = 3; }
-      }
-    }
-  };
-  const commandsInCorrectOrder = [];
-  let minValue = Infinity;
-  commandsList.forEach(currentCommand => {
-    if (currentCommand.order < minValue) {
-      minValue = currentCommand.order;
-    }
-  });
-  commandsList.forEach(currentCommand => {
-    commandsInCorrectOrder[currentCommand.order - minValue] = currentCommand.command;
-  });
-  console.log(commandsInCorrectOrder);
+  commandsList.sort((a, b) => a.order - b.order);
+  const result = commandsList.reduce((acc, currentCommand) => {
+    return moveAndTurn(currentCommand, acc);
+  }, { x: 0, y: 0, directionIndex: 0 });
 
-  commandsInCorrectOrder.forEach(currentCommand => {
-    if (currentCommand.includes('go')) {
-      ship.go(+currentCommand.slice(3));
-    }
-    if (currentCommand.includes('turn')) {
-      ship.turn(currentCommand.slice(5));
-    }
-  });
-  
   return {
-    x: ship.x,
-    y: ship.y
+    x: result.x,
+    y: result.y
   };
+}
+
+function moveAndTurn(command, accumulator) {
+  if (command.command.includes('go')) {
+    const distance = Number(command.command.slice(3))
+    switch (accumulator.directionIndex) {
+      case 0: accumulator.y += distance;
+        break;
+      case 1: accumulator.x -= distance;
+        break;
+      case 2: accumulator.y -= distance;
+        break;
+      case 3: accumulator.x += distance;
+        break;
+      default: break;
+    }
+
+    return accumulator;
+  }
+  if (command.command.includes('turn')) {
+    const direction = command.command.slice(5)
+    if (direction === 'left') {
+      accumulator.directionIndex++;
+      if (accumulator.directionIndex === 4) { accumulator.directionIndex = 0; }
+    } else {
+      accumulator.directionIndex--;
+      if (accumulator.directionIndex === -1) { accumulator.directionIndex = 3; }
+    }
+  }
+  
+  return accumulator;
 }

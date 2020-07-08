@@ -1,30 +1,17 @@
-
 export default function boundingRect(coordsList) {
-  let top = -Infinity;
-  let bottom = Infinity;
-  let left = Infinity;
-  let right = -Infinity;
-   
-  // eslint-disable-next-line array-callback-return
-  coordsList.map(currentValue => {
-    if (top < currentValue.y) {
-      top = currentValue.y;
+  if (coordsList.length === 0) {
+    return {
+      top: 0,
+      bottom: 0,
+      left: 0,
+      right: 0
     }
-    if (bottom > currentValue.y) {
-      bottom = currentValue.y;
-    }
-    if (left > currentValue.x) {
-      left = currentValue.x;
-    }
-    if (right < currentValue.x) {
-      right = currentValue.x;
-    }
-  });
-
-  return {
-    top: isFinite(top) ? top : 0,
-    right: isFinite(right) ? right : 0,
-    bottom: isFinite(bottom) ? bottom : 0,
-    left: isFinite(left) ? left : 0
-  };
+  } else {
+    return {
+      top: coordsList.sort((a, b) => b.y - a.y)[0].y,
+      bottom: coordsList.sort((a, b) => a.y - b.y)[0].y,
+      left: coordsList.sort((a, b) => a.x - b.x)[0].x,
+      right: coordsList.sort((a, b) => b.x - a.x)[0].x
+    };
+  }
 }

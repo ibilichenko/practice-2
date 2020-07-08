@@ -1,90 +1,63 @@
-function getExpeditionsTargets(commandSeries) {
-  const result = [];
-  const ship = {
-    directions: ['top', 'left', 'bottom', 'right'],
-    indexOfCurrDirection: 0,
-    x: 0,
-    y: 0,
-    go(distance) {
-      switch (this.directions[this.indexOfCurrDirection]) {
-        case 'top': this.y += distance;
-          break;
-        case 'left': this.x -= distance;
-          break;
-        case 'bottom': this.y -= distance;
-          break;
-        case 'right': this.x += distance;
-          break;
-        default: break;
-      }
-    },
-    turn(direction) {
-      if (direction === 'left') {
-        this.indexOfCurrDirection++;
-        if (this.indexOfCurrDirection === 4) { this.indexOfCurrDirection = 0; }
-      } else {
-        this.indexOfCurrDirection--;
-        if (this.indexOfCurrDirection === -1) { this.indexOfCurrDirection = 3; }
-      }
+function moveAndTurn(command, accumulator) {
+  if (command.command.includes('go')) {
+    const distance = Number(command.command.slice(3))
+    switch (accumulator.directionIndex) {
+      case 0: accumulator.y += distance;
+        break;
+      case 1: accumulator.x -= distance;
+        break;
+      case 2: accumulator.y -= distance;
+        break;
+      case 3: accumulator.x += distance;
+        break;
+      default: break;
     }
-        
-  };
-  for (const arrayOfCommands of commandSeries) {
-    ship.indexOfCurrDirection = 0;
-    ship.x = 0;
-    ship.y = 0;
-    const commandsInCorrectOrder = [];
-    let minValue = Infinity;
-    arrayOfCommands.forEach(currentCommand => {
-      if (currentCommand.order < minValue) {
-        minValue = currentCommand.order;
-      }
-    });
-    arrayOfCommands.forEach(currentCommand => {
-      commandsInCorrectOrder[currentCommand.order - minValue] = currentCommand.command;
-    });
-    commandsInCorrectOrder.forEach(currentCommand => {
-      if (currentCommand.includes('go')) {
-        ship.go(+currentCommand.slice(3));
-      }
-      if (currentCommand.includes('turn')) {
-        ship.turn(currentCommand.slice(5));
-      }
-    });
-    result.push({ x: ship.x, y: ship.y });
-  }
 
-  return result;
+    return accumulator;
+  }
+  if (command.command.includes('turn')) {
+    const direction = command.command.slice(5)
+    if (direction === 'left') {
+      accumulator.directionIndex++;
+      if (accumulator.directionIndex === 4) { accumulator.directionIndex = 0; }
+    } else {
+      accumulator.directionIndex--;
+      if (accumulator.directionIndex === -1) { accumulator.directionIndex = 3; }
+    }
+  }
+  
+  return accumulator;
+}
+
+function getExpeditionsTargets(commandSeries) {
+  const coordinateArr = commandSeries.reduce((accumulator, currentCommandSeries) => {
+    currentCommandSeries.sort((a, b) => a.order - b.order);
+    const result = currentCommandSeries.reduce((acc, command) => {
+      return moveAndTurn(command, acc);
+    }, { x: 0, y: 0, directionIndex: 0 });
+    accumulator.push(result);
+    
+    return accumulator;
+  }, []);
+
+  return coordinateArr;
 }
 
 export default function boundingRover(commandSeries) {
   const coordsList = getExpeditionsTargets(commandSeries);
-
-  let top = -Infinity;
-  let bottom = Infinity;
-  let left = Infinity;
-  let right = -Infinity;
-   
-  // eslint-disable-next-line array-callback-return
-  coordsList.map(currentValue => {
-    if (top < currentValue.y) {
-      top = currentValue.y;
+  if (coordsList.length === 0) {
+    return {
+      top: 0,
+      bottom: 0,
+      left: 0,
+      right: 0
     }
-    if (bottom > currentValue.y) {
-      bottom = currentValue.y;
-    }
-    if (left > currentValue.x) {
-      left = currentValue.x;
-    }
-    if (right < currentValue.x) {
-      right = currentValue.x;
-    }
-  });
-
-  return {
-    top: isFinite(top) ? top : 0,
-    right: isFinite(right) ? right : 0,
-    bottom: isFinite(bottom) ? bottom : 0,
-    left: isFinite(left) ? left : 0
-  };
+  } else {
+    return {
+      top: coordsList.sort((a, b) => b.y - a.y)[0].y,
+      bottom: coordsList.sort((a, b) => a.y - b.y)[0].y,
+      left: coordsList.sort((a, b) => a.x - b.x)[0].x,
+      right: coordsList.sort((a, b) => b.x - a.x)[0].x
+    };
+  }
 }
